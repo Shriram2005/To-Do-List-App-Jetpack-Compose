@@ -13,6 +13,13 @@ A simple yet powerful To-Do List App built using **Jetpack Compose** and **Fireb
 - **Persistent State:** Maintain task state across app restarts using Firebase.
 - **Modern UI:** Built with Jetpack Compose for a clean and responsive user interface.
 
+## Screenshots
+![Screenshot 2024-08-29 203359](https://github.com/user-attachments/assets/27ee0e2f-e0e9-4bd0-82aa-1b3e0664fc55)
+![Screenshot 2024-08-29 203337](https://github.com/user-attachments/assets/c2938a00-b8a0-4c49-bb95-2a82a91b767f)
+![Screenshot 2024-08-29 210700](https://github.com/user-attachments/assets/371a848c-e6b6-4d07-8949-10a766efddda)
+
+
+
 ### 🚀 Getting Started
 
 To get a local copy up and running, follow these simple steps:
@@ -50,16 +57,3 @@ To get a local copy up and running, follow these simple steps:
 3. **Manage Tasks:** Add, edit, or delete tasks as needed. Mark tasks as completed to stay organized.
 4. **Sync Tasks:** All tasks are automatically synced with Firebase, so your data is available across all devices.
 
-### 📁 Project Structure
-
-- **`screens/`**: Contains the UI screens, such as `LoginScreen`, `RegisterScreen`, and `ShowHomePage`.
-- **`dataClasses/`**: Includes data models like `TaskData`.
-- **`navigation/`**: Manages navigation between different screens using Jetpack Compose Navigation.
-- **`firebase/`**: Handles Firebase integration, including authentication and Realtime Database operations.
-
-
-### 📧 Contact
-
-For any questions or suggestions, feel free to reach out at [your.email@example.com](mailto:your.email@example.com).
-
----
