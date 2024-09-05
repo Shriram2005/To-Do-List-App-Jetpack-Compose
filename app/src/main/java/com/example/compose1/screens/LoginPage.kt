@@ -143,7 +143,8 @@ fun ShowLoginPage(navController: NavController) {
                 color = Color.Blue,
                 modifier = Modifier
                     .clickable {
-//                        Toast.makeText(context, "Going to register page", Toast.LENGTH_SHORT).show()
+//                         Going to register page
+
                         navController.navigate("register")
                     }
             )

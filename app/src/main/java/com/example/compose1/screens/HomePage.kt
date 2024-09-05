@@ -3,6 +3,7 @@ package com.example.compose1.screens
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -66,7 +68,6 @@ fun ShowHomePage(navController: NavController, userEmail: String) {
         }, context)
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,6 +105,7 @@ fun ShowHomePage(navController: NavController, userEmail: String) {
                             } else task
                         }
                         isEditing = false
+                        isEditing = false
                         currentTaskId = null
 
                         // save online
@@ -116,7 +118,7 @@ fun ShowHomePage(navController: NavController, userEmail: String) {
                             description = description,
                             completed = false,
                             createdAt = SimpleDateFormat(
-                                "yyyy-MM-dd HH:mm:ss", Locale.getDefault()
+                                "dd-MM-yyyy HH:mm:ss", Locale.getDefault()
                             ).format(Date())
                         )
                         taskList = taskList + newTask
@@ -147,19 +149,39 @@ fun ShowHomePage(navController: NavController, userEmail: String) {
                     description = task.description
                     isEditing = true
                     currentTaskId = task.id
-                })
+                }, onDone = {
+                    taskList = taskList.map {
+                        if (it.id == task.id)
+                            it.copy(completed = !it.completed)
+                        else it
+                    }
+                    // sync data online
+                    syncDataOnline(userEmail, taskList, context)
+                }
+                )
             }
         }
     }
 }
 
 @Composable
-fun TaskItem(task: TaskData, onDelete: () -> Unit, onEdit: () -> Unit) {
+fun TaskItem(task: TaskData, onDelete: () -> Unit, onEdit: () -> Unit, onDone: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(1.dp, Color.Gray),
+
+        colors = if (task.completed) CardDefaults.cardColors(
+            containerColor = Color(0xFFD1ECE4)
+        ) else CardDefaults.cardColors(
+            containerColor = Color(0xFFFFE4D8)
+        ),
+        shape = RoundedCornerShape(8.dp)
+
+
+
     ) {
         Column(modifier = Modifier.padding(16.dp, 8.dp)) {
             Text(text = task.title, style = MaterialTheme.typography.headlineSmall)
@@ -174,20 +196,19 @@ fun TaskItem(task: TaskData, onDelete: () -> Unit, onEdit: () -> Unit) {
             Row {
                 Button(
                     onClick = {
-                        task.completed = !task.completed
+                        onDone()
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (task.completed) blue
-                        else blue
+//                        containerColor = if (task.completed) blue else orangeRed
+                        containerColor = if (task.completed) Color(0xFF66BB6A) else Color(0xFFEF5350)
                     ), modifier = Modifier.weight(2f)
                 ) {
                     if (task.completed) {
-                        Text("Mark as Incomplete")
+                        Text("Completed")
                     } else {
-                        Text("Mark as Done")
+                        Text("Incomplete")
                     }
                 }
-
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
@@ -221,7 +242,7 @@ fun syncDataOnline(userEmail: String, taskList: List<TaskData>, context: Context
     val myRef = database.getReference("users/${userEmail.replace(".", ",")}/tasks")
 
     myRef.setValue(taskList).addOnSuccessListener {
-        Toast.makeText(context, "Tasks synced successfully", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, "Tasks synced successfully", Toast.LENGTH_SHORT).show()
     }.addOnFailureListener { exception ->
         Toast.makeText(
             context, "Failed to sync tasks: ${exception.message}", Toast.LENGTH_SHORT
